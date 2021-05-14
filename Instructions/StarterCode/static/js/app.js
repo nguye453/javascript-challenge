@@ -6,7 +6,7 @@ var filterButton = d3.select("#filter-btn");
 // Select the table
 var tableContent = d3.select("tbody");
 // Create event handlers
-filterButton.on("click",runFilter);
+filterButton.on("click", runFilter);
 
 tableData.forEach((datapoint) => 
 {
@@ -32,18 +32,18 @@ function runFilter()
     var shapeInput = d3.select("#shape").property("value").toLowerCase().trim();
     // Create dictionary to hold input values
     var inputDictionary = {
-        datetime:dateInput,
-        city:cityInput,
-        state:stateInput,
-        country:countryInput,
-        shape:shapeInput
+        datetime: dateInput,
+        city: cityInput,
+        state: stateInput,
+        country: countryInput,
+        shape: shapeInput
     };
-    // Make sure each input value is valid
+    // Make sure each input value is valid and ignore 'null'
     Object.entries(inputDictionary).forEach(([key, value]) => 
     {
         if(value==="")
         {
-          delete dictUser[key];
+            delete inputDictionary[key];
         }   
     });
     // Filter data
@@ -51,9 +51,20 @@ function runFilter()
     {
         return Object.entries(inputDictionary).every(item => 
         {
-          const key = item[0];
-          const value = item[1];
-          return row[key] === value;
+            const key = item[0];
+            const value = item[1];
+            return row[key] === value;
         });
     });
-}
+    // Display data in table
+    tableContent.html("");
+    filteredTableContent.forEach((item) => 
+    {
+        var row = tableContent.append("tr");
+        Object.entries(item).forEach(([key, value]) => 
+        {
+            var cell = row.append("td");
+            cell.text(value);
+        });
+    });
+};
