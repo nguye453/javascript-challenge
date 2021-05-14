@@ -38,4 +38,22 @@ function runFilter()
         country:countryInput,
         shape:shapeInput
     };
+    // Make sure each input value is valid
+    Object.entries(inputDictionary).forEach(([key, value]) => 
+    {
+        if(value==="")
+        {
+          delete dictUser[key];
+        }   
+    });
+    // Filter data
+    filteredTableContent = filteredTableContent.filter(row => 
+    {
+        return Object.entries(inputDictionary).every(item => 
+        {
+          const key = item[0];
+          const value = item[1];
+          return row[key] === value;
+        });
+    });
 }
